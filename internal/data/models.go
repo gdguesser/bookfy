@@ -128,7 +128,7 @@ func (u *User) Update() error {
 		email = $1,
 		first_name = $2,
 		last_name = $3,
-		updated_at = $4,
+		updated_at = $4
 		where id = $5
 	`
 
