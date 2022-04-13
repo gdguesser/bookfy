@@ -22,8 +22,6 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, data in
 		return errors.New("body must have only a single json value")
 	}
 
-
-
 	return nil
 }
 
@@ -61,4 +59,4 @@ func (app *application) errorJSON(w http.ResponseWriter, err error, status ...in
 	payload.Message = err.Error()
 
 	app.writeJSON(w, statusCode, payload)
-} 
+}
