@@ -210,6 +210,8 @@ DocProject/Help/html
 
 # Click-Once directory
 publish/
+db-data/
+vueapi
 
 # Publish Web Output
 *.[Pp]ublish.xml
