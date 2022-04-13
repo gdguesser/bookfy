@@ -120,6 +120,46 @@ func (u *User) GetById(id int) (*User, error) {
 	return &user, nil
 }
 
+func (u *User) Update() error {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `update users set
+		email = $1,
+		first_name = $2,
+		last_name = $3,
+		updated_at = $4,
+		where id = $5
+	`
+
+	_, err := db.ExecContext(ctx, stmt,
+		u.Email,
+		u.FirstName,
+		u.LastName,
+		time.Now(),
+		u.ID,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *User) Delete() error {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `delete from users where id = $1`
+
+	_, err := db.ExecContext(ctx, stmt, u.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type Token struct {
 	ID        int       `json:"id"`
 	UserID    string    `json:"user_id"`
