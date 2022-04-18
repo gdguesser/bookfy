@@ -2,7 +2,10 @@ package data
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/sha256"
 	"database/sql"
+	"encoding/base32"
 	"errors"
 	"time"
 
@@ -225,7 +228,7 @@ func (u *User) PasswordMatches(plaintText string) (bool, error) {
 
 type Token struct {
 	ID        int       `json:"id"`
-	UserID    string    `json:"user_id"`
+	UserID    int       `json:"user_id"`
 	Email     string    `json:"email"`
 	Token     string    `json:"token"`
 	TokenHash []byte    `json:"-"`
@@ -285,3 +288,24 @@ func (t *Token) GetUserForToken(token Token) (*User, error) {
 
 	return &user, nil
 }
+
+func (t *Token) GenerateToken(userID int, ttl time.Duration) (*Token, error) {
+	token := &Token{
+		UserID: userID,
+		Expiry: time.Now().Add(ttl),
+	}
+
+	randomBytes := make([]byte, 16)
+	_, err := rand.Read(randomBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	token.Token = base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString(randomBytes)
+	hash := sha256.Sum256([]byte(token.Token))
+	token.TokenHash = hash[:]
+
+	return token, nil
+}
+
+
