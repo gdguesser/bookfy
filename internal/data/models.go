@@ -179,7 +179,7 @@ func (u *User) Insert(user User) (int, error) {
 
 	var newID int
 	stmt := `insert into users (email, first_name, last_name, password, created_at, updated_at)
-		value ($1, $2, $3, $4, $5, $6) returning id`
+		values($1, $2, $3, $4, $5, $6) returning id`
 
 	err = db.QueryRowContext(ctx, stmt,
 		user.Email,
