@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -208,6 +209,20 @@ func (u *User) ResetPassword(password string) error {
 	return nil
 }
 
+func (u *User) PasswordMatches(plaintText string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(plaintText))
+	if err != nil {
+		switch {
+		case errors.Is(err, bcrypt.ErrMismatchedHashAndPassword):
+			return false, nil
+		default:
+			return false, err
+		}
+	}
+
+	return true, nil
+}
+
 type Token struct {
 	ID        int       `json:"id"`
 	UserID    string    `json:"user_id"`
@@ -217,4 +232,11 @@ type Token struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Expiry    time.Time `json:"expiry"`
+}
+
+func (t *Token) GetByToken(plainText string) (*Token, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	
 }
