@@ -77,18 +77,18 @@ func (app *application) Login(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) Logout(w http.ResponseWriter, r *http.Request) {
 	var requestPayload struct {
-		token string `json:"token"`
+		Token string `json:"token"`
 	}
 
-	err := app.readJSON(w, r, requestPayload)
+	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
-		app.errorJSON(w, errors.New("Invalid json"))
+		app.errorJSON(w, errors.New("Invalid json1"))
 		return
 	}
 
-	err = app.models.Token.DeleteToken(requestPayload.token)
+	err = app.models.Token.DeleteToken(requestPayload.Token)
 	if err != nil {
-		app.errorJSON(w, errors.New("Invalid json"))
+		app.errorJSON(w, errors.New("Invalid json2"))
 		return
 	}
 
