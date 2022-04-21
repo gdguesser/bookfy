@@ -317,7 +317,7 @@ func (t *Token) AuthenticateToken(r *http.Request) (*User, error) {
 	}
 
 	headerParts := strings.Split(authorizationHeader, " ")
-	if len(headerParts) != 2 || headerParts[0] == "Bearer" {
+	if len(headerParts) != 2 || headerParts[0] == "Bearer " {
 		return nil, errors.New("No valid authorization header received")
 	}
 
