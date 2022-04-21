@@ -211,6 +211,7 @@ DocProject/Help/html
 # Click-Once directory
 publish/
 db-data/
+.idea/
 vueapi
 
 # Publish Web Output
