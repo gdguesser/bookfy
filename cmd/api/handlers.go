@@ -3,8 +3,11 @@ package main
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 	"vue-api/internal/data"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type jsonResponse struct {
@@ -165,4 +168,20 @@ func (app *application) EditUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
+}
+
+func (app *application) GetUser(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	user, err := app.models.User.GetById(userID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, user)
 }
