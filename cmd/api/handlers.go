@@ -120,7 +120,7 @@ func (app *application) AllUsers(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) EditUser(w http.ResponseWriter, r *http.Request) {
 	var user data.User
-	err := app.readJSON(w, r, user)
+	err := app.readJSON(w, r, &user)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
