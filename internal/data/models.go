@@ -369,6 +369,10 @@ func (t *Token) AuthenticateToken(r *http.Request) (*User, error) {
 		return nil, errors.New("No matching user found")
 	}
 
+	if user.Active == 0 {
+		return nil, errors.New("User not active")
+	}
+
 	return user, nil
 }
 
