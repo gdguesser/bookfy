@@ -239,5 +239,16 @@ func (app *application) LogUserOutAndSetInactive(w http.ResponseWriter, r *http.
 	}
 
 	//delete the tokens for user
+	err = app.models.Token.DeleteTokensForUser(userID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 
+	payload := jsonResponse{
+		Error:   false,
+		Message: "User logged out and set to inactive",
+	}
+
+	_ = app.writeJSON(w, http.StatusAccepted, payload)
 }
