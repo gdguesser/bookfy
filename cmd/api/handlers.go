@@ -217,3 +217,27 @@ func (app *application) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	_ = app.writeJSON(w, http.StatusOK, payload)
 }
+
+func (app *application) LogUserOutAndSetInactive(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	user, err := app.models.User.GetById(userID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	user.Active = 0
+	err = user.Update()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	//delete the tokens for user
+
+}
