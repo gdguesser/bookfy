@@ -52,6 +52,12 @@ func (app *application) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Make sure user is active
+	if user.Active == 0 {
+		app.errorJSON(w, errors.New("User is not active"))
+		return
+	}
+
 	//if user valid, generate a token
 	token, err := app.models.Token.GenerateToken(user.ID, 24*time.Hour)
 	if err != nil {
