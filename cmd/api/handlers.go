@@ -258,7 +258,7 @@ func (app *application) ValidateToken(w http.ResponseWriter, r *http.Request) {
 		Token string `json:"token"`
 	}
 
-	err := app.readJSON(w, r, requestPayload)
+	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
